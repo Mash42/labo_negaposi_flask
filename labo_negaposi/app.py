@@ -5,9 +5,9 @@ app = Flask(__name__)
 
 MYSQL_OPTIONS = {"host": 'localhost'
                 ,"port": 3306
-                ,"user": '{user}'
-                ,"passwd": '{password}'
-                ,"db": '{database_name}'
+                ,"user": 'negaposi'
+                ,"passwd": 'labo00001'
+                ,"db": 'negaposi'
                 ,"charset": 'utf8'
                 }
 
@@ -104,4 +104,4 @@ def getConnection():
     return conn
 
 if __name__ == '__main__':
-    app.run(host='localhost', port=5500, debug=True)
+    app.run(host='0.0.0.0', port=8000, debug=True)

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>NEGAPOSI</title>
+    </head>
+    <body>
+        <form action="/search" name="search_form" method="post">
+            {% if labo_list != None %}
+                <select name="labo" id="labo_id">
+                    {% for record in labo_list %}
+                        <option value="{{ record.labo_id }}">{{ record.labo_name }}</option>
+                    {% endfor %}
+                </select>
+            {% endif %}
+            {% if  year_list != None %}
+                <select name="year" id="year_id">
+                    {% for record in year_list %}
+                        <option value="{{ record.year }}">{{ record.year }}年</option>
+                    {% endfor %}
+                </select>
+            {% endif %}
+            <button type="submit">検索ンゴ</button>
+        </form>
+        {% if comment_list != None %}
+            <div class="search_result_area">
+                <table class="table table-striped table-bordered table-hover table-sm">
+                    <thead class="thead-dark">
+                        <tr>
+                            <th scope="col" class="text-nowrap text-center">生徒番号</th>
+                            <th scope="col" class="text-nowrap">研究室番号</th>
+                            <th scope="col" class="text-nowrap">研究室名</th>
+                            <th scope="col" class="text-nowrap">年度</th>
+                            <th scope="col" class="text-nowrap">感想</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for record in comment_list %}
+                            <tr>
+                                <td scope="row">
+                                    {{record['student_id']}}
+                                </td>
+                                <td scope="row">
+                                    {{record['labo_id']}}
+                                </td>
+                                <td scope="row">
+                                    {{record['labo_name']}}
+                                </td>
+                                <td scope="row">
+                                    {{record['year']}}
+                                </td>
+                                <td scope="row">
+                                    {{record['comments']}}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% endif %}
+    </body>
+</html>

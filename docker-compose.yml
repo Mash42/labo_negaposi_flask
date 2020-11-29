@@ -1,17 +1,33 @@
-version: '3'
+version: "3"
 
 services:
-   db:
-     image: mariadb_utf8
-     volumes:
-       - account_manage_db:/var/lib/mysql
-     restart: always
-   web:
-     depends_on:
-       - db
-     image: .
-     ports:
-       - "8000:8000"
-     restart: always
+  db:
+    build: ./mariadb/
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./mariadb/sql:/docker-entrypoint-initdb.d
+      - v_account_manage_db:/var/lib/mysql
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=admin
+      - MYSQL_DATABASE=negaposi
+      - MYSQL_USER=negaposi_user
+      - MYSQL_PASSWORD=negaposi_pass_db
+  web:
+    build: .
+    ports:
+      - "5000:5000"
+    volumes:
+      - "./src:/src"
+    tty: true
+    environment:
+      TZ: Asia/Tokyo
+      FLASK_APP: app.py
+      FLASK_ENV: development
+    command: flask run -h 0.0.0.0
+    restart: always
+
 volumes:
-    account_manage_db:
+  v_account_manage_db:
+    driver: local

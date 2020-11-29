@@ -1,7 +1,9 @@
 FROM python:3.9.0
 
-COPY labo_negaposi /negaposi/labo_negaposi
+ARG project_dir=/src/
 
-RUN pip install -r /negaposi/labo_negaposi/setup/requirements.txt
+ADD src/requirements.txt $project_dir
 
-RUN python /negaposi/labo_negaposi/app.py
+WORKDIR $project_dir
+
+RUN pip install -r requirements.txt

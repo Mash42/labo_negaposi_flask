@@ -45,12 +45,12 @@ def insert_labo_comments_testdata():
             sql = "INSERT INTO TBL_STUDENT_COMMENTS (STUDENT_ID, LABO_ID, YEAR, COMMENTS) VALUES (%s, %s, %s, %s)"
             for i in range(30):
                 r = cursor.execute(
-                    sql, (i+1, i % 10 + 1, 2020, '2020年コメント' + str(i+1)))
+                    sql, (i+1, i % 10 + 1, 2019, '2019年コメント' + str(i+1)))
             print(r)  # -> 1
             # autocommitではないので、明示的にコミットする
             conn.commit()
     finally:
         conn.close()
 
-insert_labo_testdata()
+#insert_labo_testdata()
 insert_labo_comments_testdata()

@@ -1,20 +1,41 @@
 from flask import Flask, render_template, request
 import pymysql
 import requests
+
 app = Flask(__name__)
 
-MYSQL_OPTIONS = {"host": 'localhost'
+
+MYSQL_OPTIONS = {"host": 'db'# docker compose のサービス名になる？
                 ,"port": 3306
-                ,"user": 'negaposi'
-                ,"passwd": 'labo00001'
+                ,"user": 'negaposi_user'
+                ,"passwd": 'negaposi_pass_db'
                 ,"db": 'negaposi'
                 ,"charset": 'utf8'
-                }
-
+                 }
 
 @app.route('/', methods=["GET", "POST"])
 def index():
+    #return render_template("index.html", labo_list=None, comment_list=None, year_list=None)
+    print('get_databases()実行前')
+    hoge = get_databases()
+    print('get_databases()実行後')
+    for db_name in hoge:
+        print(db_name)
     return render_template("index.html", labo_list=get_labo_list(), comment_list=None, year_list=get_year_list())
+def get_databases():
+    conn = getConnection()
+    try:
+        with conn.cursor() as cursor:
+            sql = "show databases;"
+            cursor.execute(sql)
+            result = cursor.fetchall()
+    finally:
+        conn.close()
+    result_list = list()
+    for row in result:
+        result_list.append(row["Database"])
+
+    return result_list
 
 @app.route('/search', methods=["GET", "POST"])
 def search():
@@ -104,4 +125,4 @@ def getConnection():
     return conn
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=8000, debug=True)
+    app.run(host="0.0.0.0", port=5000)

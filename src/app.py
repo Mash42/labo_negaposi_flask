@@ -15,37 +15,24 @@ MYSQL_OPTIONS = {"host": 'db'# docker compose のサービス名になる？
 
 @app.route('/', methods=["GET", "POST"])
 def index():
-    #return render_template("index.html", labo_list=None, comment_list=None, year_list=None)
-    print('get_databases()実行前')
-    hoge = get_databases()
-    print('get_databases()実行後')
-    for db_name in hoge:
-        print(db_name)
     return render_template("index.html", labo_list=get_labo_list(), comment_list=None, year_list=get_year_list())
-def get_databases():
-    conn = getConnection()
-    try:
-        with conn.cursor() as cursor:
-            sql = "show databases;"
-            cursor.execute(sql)
-            result = cursor.fetchall()
-    finally:
-        conn.close()
-    result_list = list()
-    for row in result:
-        result_list.append(row["Database"])
-
-    return result_list
 
 @app.route('/search', methods=["GET", "POST"])
 def search():
     comment_list = None
+    select_labo_id = None
+    select_year = None
     if request.method == 'POST':
-        select_labo = request.form["labo"]
+        select_labo_id = request.form["labo"]
         select_year = request.form["year"]
-        comment_list = get_student_comments(select_labo, select_year)
+        comment_list = get_student_comments(select_labo_id, select_year)
     
-    return render_template("index.html", labo_list=get_labo_list(), comment_list=comment_list, year_list=get_year_list())
+    return render_template("index.html"
+                          ,labo_list=get_labo_list()
+                          ,comment_list=comment_list
+                          ,year_list=get_year_list()
+                          ,select_labo_id=select_labo_id
+                          ,select_year=select_year)
 
 def get_labo_list():
     conn = getConnection()

@@ -11,6 +11,15 @@
         <!-- Required script tags -->
         <script src="/static/js/jquery-3.5.1.min.js" crossorigin="anonymous"></script>
         <script src="/static/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+        <!-- My Custom script tags -->
+        <script type="text/javascript">
+            $(function(){
+                $("#labo_select_id option[value='{{select_labo_id}}']").prop('selected', true);
+                $("#year_select_id option[value='{{select_year}}']").prop('selected', true);
+                
+            })
+           
+        </script>
         <title>NEGAPOSI</title>
     </head>
     <body>
@@ -23,8 +32,8 @@
                             <div class="col-6">
                                 <div class="form-group">
                                     {% if labo_list != None %}
-                                        <label for="labo_id">研究室</label>
-                                        <select name="labo" id="labo_id" class="form-control">
+                                        <label for="labo_select_id">研究室</label>
+                                        <select name="labo" id="labo_select_id" class="form-control">
                                             {% for record in labo_list %}
                                                 <option value="{{ record.labo_id }}">{{ record.labo_name }}</option>
                                             {% endfor %}
@@ -35,8 +44,8 @@
                             <div class="col-6">
                                 <div class="form-group">
                                     {% if  year_list != None %}
-                                        <label for="labo_id">年度</label>
-                                        <select name="year" id="year_id" class="form-control">
+                                        <label for="year_select_id">年度</label>
+                                        <select name="year" id="year_select_id" class="form-control">
                                             {% for record in year_list %}
                                                 <option value="{{ record.year }}">{{ record.year }}年</option>
                                             {% endfor %}
@@ -88,6 +97,5 @@
                 </div>
             </div>
         </div>
-
     </body>
 </html>

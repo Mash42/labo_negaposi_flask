@@ -11,7 +11,7 @@ MYSQL_OPTIONS = {"host": 'db'
                 ,"passwd": 'negaposi_pass_db'
                 ,"db": 'negaposi'
                 ,"charset": 'utf8'
-                 }
+                }
 
 # ホーム
 @app.route('/', methods=["GET", "POST"])

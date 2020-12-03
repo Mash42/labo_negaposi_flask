@@ -1,12 +1,13 @@
 import pymysql
 
-MYSQL_OPTIONS = {"host": 'localhost'
+# データベースコネクション情報
+MYSQL_OPTIONS = {"host": 'db'
                 ,"port": 3306
-                ,"user": 'negaposi'
-                ,"passwd": 'labo00001'
+                ,"user": 'negaposi_user'
+                ,"passwd": 'negaposi_pass_db'
                 ,"db": 'negaposi'
                 ,"charset": 'utf8'
-                 }
+                }
 
 def insert_labo_testdata():
     # Insert処理
@@ -45,7 +46,7 @@ def insert_labo_comments_testdata():
             sql = "INSERT INTO TBL_STUDENT_COMMENTS (STUDENT_ID, LABO_ID, YEAR, COMMENTS) VALUES (%s, %s, %s, %s)"
             for i in range(30):
                 r = cursor.execute(
-                    sql, (i+1, i % 10 + 1, 2019, '2019年コメント' + str(i+1)))
+                    sql, (i+100, 1, 2019, '2019年大量データンゴ' + str(i+1)))
             print(r)  # -> 1
             # autocommitではないので、明示的にコミットする
             conn.commit()

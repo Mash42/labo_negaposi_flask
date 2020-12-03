@@ -114,6 +114,8 @@
         </div>
         <script>
             var items = [];
+            //1ページあたりに表示するデータ数
+            var par_page = 5;
             {% if comment_list != None %}
                 {% for record in comment_list %}
                     items.push({"student_id":"{{record.student_id}}"
@@ -124,7 +126,18 @@
                                });
                 {% endfor %}
             {% endif %}
-            
+            //最後のページの件数がpar_page未満になる場合は空データを作成
+            if(items.length % par_page > 0){
+                for(var i=0; i < items.length % par_page; i++){
+                    items.push({"student_id":""
+                               ,"labo_id":""
+                               ,"labo_name":""
+                               ,"year":""
+                               ,"comments":""
+                               });
+
+                }
+            }
             Vue.component('paginate', VuejsPaginate)
             
             new Vue({
@@ -132,7 +145,7 @@
                 delimiters: ["[[", "]]"],
                 data: {
                     items: items,
-                    parPage: 5,
+                    parPage: par_page,
                     currentPage: 1
                 },
                 methods: {

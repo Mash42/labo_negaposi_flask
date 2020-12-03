@@ -4,8 +4,8 @@ import requests
 
 app = Flask(__name__)
 
-
-MYSQL_OPTIONS = {"host": 'db'# docker compose のサービス名になる？
+# データベースコネクション情報
+MYSQL_OPTIONS = {"host": 'db'
                 ,"port": 3306
                 ,"user": 'negaposi_user'
                 ,"passwd": 'negaposi_pass_db'
@@ -13,10 +13,16 @@ MYSQL_OPTIONS = {"host": 'db'# docker compose のサービス名になる？
                 ,"charset": 'utf8'
                  }
 
+# ホーム
 @app.route('/', methods=["GET", "POST"])
 def index():
-    return render_template("index.html", labo_list=get_labo_list(), comment_list=None, year_list=get_year_list())
+    return render_template("index.html"
+                          ,labo_list=get_labo_list()
+                          ,comment_list=None
+                          ,year_list=get_year_list()
+                          )
 
+# 検索
 @app.route('/search', methods=["GET", "POST"])
 def search():
     comment_list = None
@@ -32,13 +38,20 @@ def search():
                           ,comment_list=comment_list
                           ,year_list=get_year_list()
                           ,select_labo_id=select_labo_id
-                          ,select_year=select_year)
+                          ,select_year=select_year
+                          )
 
+# 研究室データ一覧を取得する。
 def get_labo_list():
     conn = getConnection()
     try:
         with conn.cursor() as cursor:
-            sql = "select LABO_ID, LABO_NAME FROM TBL_LABO;"
+            sql = """
+                  SELECT LABO_ID
+                        ,LABO_NAME
+                    FROM TBL_LABO
+                  ;
+                  """
             cursor.execute(sql)
             result = cursor.fetchall()
     finally:
@@ -50,6 +63,7 @@ def get_labo_list():
                            })
     return result_list
 
+# 生徒の感想文データ一覧を取得する
 def get_student_comments(lab_id, year):
     conn = getConnection()
     try:
@@ -81,6 +95,7 @@ def get_student_comments(lab_id, year):
                            })
     return result_list
 
+# 年度一覧を取得する。
 def get_year_list():
     conn = getConnection()
     try:
@@ -99,17 +114,18 @@ def get_year_list():
         result_list.append({"year":row["YEAR"]})
     return result_list
 
-#データベースコネクション獲得
+# データベースコネクション獲得
 def getConnection():
-    conn = pymysql.connect(host=MYSQL_OPTIONS['host'],
-                           port=MYSQL_OPTIONS['port'],
-                           user=MYSQL_OPTIONS['user'],
-                           passwd=MYSQL_OPTIONS['passwd'],
-                           db=MYSQL_OPTIONS['db'],
-                           charset=MYSQL_OPTIONS['charset'],
-                           cursorclass=pymysql.cursors.DictCursor
-                           )
+    conn = pymysql.connect(host=MYSQL_OPTIONS['host']
+                          ,port=MYSQL_OPTIONS['port']
+                          ,user=MYSQL_OPTIONS['user']
+                          ,passwd=MYSQL_OPTIONS['passwd']
+                          ,db=MYSQL_OPTIONS['db']
+                          ,charset=MYSQL_OPTIONS['charset']
+                          ,cursorclass=pymysql.cursors.DictCursor
+                          )
     return conn
 
+# アプリ起動
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=5000)

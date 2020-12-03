@@ -1,6 +1,8 @@
 from flask import Flask, render_template, request
 import pymysql
 import requests
+import re
+from flask import Markup
 
 app = Flask(__name__)
 
@@ -73,7 +75,7 @@ def get_student_comments(lab_id, year):
                         ,A.LABO_ID
                         ,B.LABO_NAME
                         ,A.YEAR
-                        ,A.COMMENTS
+                        ,A.COMMENTS AS COMMENTS
                     FROM TBL_STUDENT_COMMENTS A
                         ,TBL_LABO B
                   WHERE A.LABO_ID = B.LABO_ID
@@ -91,8 +93,9 @@ def get_student_comments(lab_id, year):
                            ,"labo_id":row["LABO_ID"]
                            ,"labo_name":row["LABO_NAME"]
                            ,"year":row["YEAR"]
-                           ,"comments":row["COMMENTS"]
+                           ,"comments":Markup(row["COMMENTS"])
                            })
+        print(row["COMMENTS"])
     return result_list
 
 # 年度一覧を取得する。
@@ -125,6 +128,10 @@ def getConnection():
                           ,cursorclass=pymysql.cursors.DictCursor
                           )
     return conn
+
+@app.template_filter('cr')
+def cr(arg):
+    return Markup(arg.replace('\r\n', '<br>'))
 
 # アプリ起動
 if __name__ == '__main__':
